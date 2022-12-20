@@ -14,14 +14,35 @@ jobs:
         with:
           version: "v0.11.1"
       
-      - name: Testing
+      - name: Testing kind-cluster
         run: |
           kubectl cluster-info
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
           echo "environment-kubeconfig:" ${KUBECONFIG}
 
-      - name: report upload
-        uses: actions/upload-artifact@v3
-        with:
-          path: report.log
+      - name: Start minikube
+        uses: medyagh/setup-minikube@master
+        
+      - name: Try the cluster !
+        run: kubectl get pods -A
+    
+      - name: Build image
+        run: |
+          export SHELL=/bin/bash
+          eval $(minikube -p minikube docker-env)
+          docker build -f ./Dockerfile -t local/example .
+          echo -n "verifying images:"
+          docker images        
+      
+      - name: Deploy to minikube
+        run:
+          kubectl apply -f deploy-to-minikube.yaml
+      
+      - name: Test service URLs
+        run: |
+          minikube service list
+          minikube service example --url
+          echo "------------------opening the service------------------"
+          curl $(minikube service example --url)            
+
