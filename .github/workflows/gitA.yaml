@@ -20,3 +20,8 @@ jobs:
           kubectl get pods -n kube-system
           echo "current-context:" $(kubectl config current-context)
           echo "environment-kubeconfig:" ${KUBECONFIG}
+
+      - name: report upload
+        uses: actions/upload-artifact@v3
+        with:
+          path: report.log
