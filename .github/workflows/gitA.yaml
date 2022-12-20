@@ -1,7 +1,7 @@
 name: kind and minikube clusters create
 
 on:
-  pull_request:
+  push:
     branches: [main]
 
 jobs:
