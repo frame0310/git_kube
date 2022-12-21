@@ -4,51 +4,64 @@ on:
   push:
     branches: [master]
 
+env:
+      start_kind: var_start_kind_sec
+      report: report.log
+
 jobs:
   kind:
     runs-on: ubuntu-latest
-    env:
-      start_kind: var_start_kind_sec
-      report: report.log
     outputs:
-      output1: ${{ steps.start.outputs.start }}
-        
+      out1: ${{ steps.start1.outputs.start1 }}
+           
     steps:
-
       - name: job's start time
         id: start
-        run: echo "start=$(date '+%s')" >> $GITHUB_OUTPUT
-     
+        run: echo "start1=$(date '+%s')" >> $GITHUB_OUTPUT
+
       - uses: engineerd/setup-kind@v0.5.0
         with:
           version: "v0.11.1"
       
-      - name: Testing kind-cluster and get info
+      - name: Testing cluster and get info
         run: |
           echo "kube version:\n $(kubectl version --short)" >>  ${{ env.report }}
           echo "amount nodes: $(kubectl get nodes | grep -c 'Ready') \n" >> ${{ env.report }}
-          echo start_kind= $($(date '+%s')-${{ steps.start.outputs.start }})
-          echo "time for start cluster: ${{start_kind}} seconds" >> ${{ env.report }}
-          
+          echo "time for start cluster: $(($(date '+%s')-${{ steps.start1.outputs.start1 }})) seconds" >> ${{ env.report }}
+     
+     
+     
+        #echo $($(date '+%s')-${{ steps.start.outputs.start }}) >> ${{ env.start_kind }}
         # echo -e "kube version:\n$(kubectl version --short)\n" >>                   
 
+      #- name: upload report
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    path: ${{ env.report }}
+  minikube:
+    needs: kind
+    runs-on: ubuntu-latest
+    
+    outputs:
+        out2: ${{ steps.start2.outputs.start2 }}
+    
+    steps:
+
+      - name: job's start time
+        id: start
+        run: echo "start2=$(date '+%s')" >> $GITHUB_OUTPUT
+    
+      - name: Start minikube
+        uses: medyagh/setup-minikube@master
+    
+      - name: Testing cluster and get info
+        run: |
+          echo "\n kube version:\n $(kubectl version --short)" >>  ${{ env.report }}
+          echo "amount nodes: $(kubectl get nodes | grep -c 'Ready') \n" >> ${{ env.report }}
+          echo "time for start cluster: $(($(date '+%s')-${{ steps.start2.outputs.start2 }})) seconds" >> ${{ env.report }}
+
+  
       - name: upload report
         uses: actions/upload-artifact@v2
         with:
           path: ${{ env.report }}
- 
-
-
-  #minikube:
-  #  needs: kind
-  #  runs-on: ubuntu-latest
-    
-  #  steps:
-    
-  #  - uses: actions/checkout@v2
-    
-  #  - name: Start minikube
-  #    uses: medyagh/setup-minikube@master
-    
-  #  - name: Try the cluster !
-  #    run: kubectl get pods -A
