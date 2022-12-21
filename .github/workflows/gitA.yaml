@@ -11,8 +11,8 @@ jobs:
     env:
       report: report.log
 
-    #outputs:
-    #  output1: ${{ steps.info.outputs.info }}
+    outputs:
+      output1: ${{ steps.start.outputs.start }}
     #  output2: ${{ steps.time.outputs.time }}
 
 
@@ -22,16 +22,14 @@ jobs:
       - name: job's start time
         id: start
         run: echo "time=$(date '+%s')" >> $GITHUB_OUTPUT
-
-
-      
+     
       - uses: engineerd/setup-kind@v0.5.0
         with:
           version: "v0.11.1"
       
       - name: Testing kind-cluster and get info
         run: |
-          echo -e "K8s version:\n$(kubectl version)" >>  ${{ env.report }}
+          echo -e "kube version:\n$(kubectl version --short)" >>  ${{ env.report }}
           kubectl get pods -n kube-system >> ${{ env.report }}
           echo "\n Time for start cluster: $(($(date '+%s')-${{ steps.start.outputs.start }})) seconds" >> ${{ env.report }}
 
