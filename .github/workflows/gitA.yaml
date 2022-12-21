@@ -5,8 +5,8 @@ on:
     branches: [master]
 
 env:
-      start_kind: var_start_kind_sec
-      report: report.log
+      report1: report1.log
+      report2: report2.log
 
 jobs:
   kind:
@@ -25,40 +25,40 @@ jobs:
       
       - name: Testing cluster and get info
         run: |
-          echo "kube version: $(kubectl version --short)" >>  ${{ env.report }}
-          echo "amount nodes: $(kubectl get nodes | grep -c 'Ready') \n" >> ${{ env.report }}
-          echo "time for start cluster: $(($(date '+%s')-${{ steps.start1.outputs.start1 }})) seconds" >> ${{ env.report }}
+          echo "Kube version: $(kubectl version --short)" >>  ${{ env.report1 }}
+          echo "Amount nodes: $(kubectl get nodes | grep -c 'Ready')" >> ${{ env.report1 }}
+          echo "Time for start cluster: $(($(date '+%s')-${{ steps.start1.outputs.start1 }})) seconds" >> ${{ env.report1 }}
      
-      - name: upload report
+      - name: upload report 1
         uses: actions/upload-artifact@v2
         with:
-          path: ${{ env.report }}
+          path: ${{ env.report1 }}
 
 
 
-  #minikube:
-  #  needs: kind
-  #  runs-on: ubuntu-latest
+  minikube:
+    needs: kind
+    runs-on: ubuntu-latest
     
-  #  outputs:
-  #      out2: ${{ steps.start2.outputs.start2 }}
+    outputs:
+        out2: ${{ steps.start2.outputs.start2 }}
     
-  #  steps:
+    steps:
 
-  #    - name: job's start time
-  #      id: start2
-  #      run: echo "start2=$(date '+%s')" >> $GITHUB_OUTPUT
+      - name: job's start time
+        id: start2
+        run: echo "start2=$(date '+%s')" >> $GITHUB_OUTPUT
     
-  #    - name: Start minikube
-  #      uses: medyagh/setup-minikube@master
+      - name: Start minikube
+        uses: medyagh/setup-minikube@master
     
-  #    - name: Testing cluster and get info
-  #      run: |
-  #        echo "\n kube version:\n $(kubectl version --short)" >>  ${{ env.report }}
-  #        echo "amount nodes: $(kubectl get nodes | grep -c 'Ready') \n" >> ${{ env.report }}
-  #        echo "time for start cluster: $(($(date '+%s')-${{ steps.start2.outputs.start2 }})) seconds" >> ${{ env.report }}
+      - name: Testing cluster and get info
+        run: |
+          echo "Kube version: $(kubectl version --short)" >>  ${{ env.report2 }}
+          echo "Amount nodes: $(kubectl get nodes | grep -c 'Ready')" >> ${{ env.report2 }}
+          echo "Time for start cluster: $(($(date '+%s')-${{ steps.start2.outputs.start2 }})) seconds" >> ${{ env.report2 }}
 
-  #    - name: upload report
-  #      uses: actions/upload-artifact@v2
-  #      with:
-  #        path: ${{ env.report }}
+      - name: upload report 2
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ env.report2 }}
