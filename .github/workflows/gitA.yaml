@@ -48,7 +48,7 @@ jobs:
     steps:
 
       - name: job's start time
-        id: start
+        id: start2
         run: echo "start2=$(date '+%s')" >> $GITHUB_OUTPUT
     
       - name: Start minikube
@@ -60,7 +60,6 @@ jobs:
           echo "amount nodes: $(kubectl get nodes | grep -c 'Ready') \n" >> ${{ env.report }}
           echo "time for start cluster: $(($(date '+%s')-${{ steps.start2.outputs.start2 }})) seconds" >> ${{ env.report }}
 
-  
       - name: upload report
         uses: actions/upload-artifact@v2
         with:
