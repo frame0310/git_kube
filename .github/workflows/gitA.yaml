@@ -25,7 +25,7 @@ jobs:
       - name: Testing kind-cluster and get info
         run: |
           echo "kube version:\n$(kubectl version --short)" >>  ${{ env.report }}
-          echo "amount nodes: $(kubectl get nodes| grep -c 'Ready' \n" >> ${{ env.report }}
+          echo "amount nodes: $(kubectl get nodes | grep -c 'Ready') \n" >> ${{ env.report }}
           echo "time for start cluster: $ (($(date '+%s')-${{ steps.start.outputs.start }})) seconds" >> ${{ env.report }}
 
         # echo -e "kube version:\n$(kubectl version --short)\n" >>                   
