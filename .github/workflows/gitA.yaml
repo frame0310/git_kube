@@ -33,7 +33,7 @@ jobs:
         run: |
           echo -e "K8s version:\n$(kubectl version --short)" >>  ${{ env.report }}
           kubectl get pods -n kube-system >> ${{ env.report }}
-          echo "\n Time for start cluster: $(($(date '+%s')-${{ steps.start.outputs.start }})) seconds" >> ${{ env.report.log }}
+          echo "\n Time for start cluster: $(($(date '+%s')-${{ steps.start.outputs.start }})) seconds" >> ${{ env.report }}
 
         # echo -e "kube version:\n$(kubectl version --short)\n" >>                   
 
