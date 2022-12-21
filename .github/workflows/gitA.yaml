@@ -8,6 +8,7 @@ jobs:
   kind:
     runs-on: ubuntu-latest
     env:
+      start_kind: var_start_kind_sec
       report: report.log
     outputs:
       output1: ${{ steps.start.outputs.start }}
@@ -24,10 +25,11 @@ jobs:
       
       - name: Testing kind-cluster and get info
         run: |
-          echo "kube version:\n$(kubectl version --short)" >>  ${{ env.report }}
+          echo "kube version:\n $(kubectl version --short)" >>  ${{ env.report }}
           echo "amount nodes: $(kubectl get nodes | grep -c 'Ready') \n" >> ${{ env.report }}
-          echo "time for start cluster: $(($(date '+%s')-${{ steps.start.outputs.start }})) seconds" >> ${{ env.report }}
-
+          echo start_kind= $($(date '+%s')-${{ steps.start.outputs.start }})
+          echo "time for start cluster: ${{start_kind}} seconds" >> ${{ env.report }}
+          
         # echo -e "kube version:\n$(kubectl version --short)\n" >>                   
 
       - name: upload report
