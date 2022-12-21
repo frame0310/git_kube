@@ -31,10 +31,11 @@ jobs:
       
       - name: Testing kind-cluster and get info
         run: |
-          echo -e "kube version:\n$(kubectl version --short)\n" >> report.log
+          echo -e "K8s version:\n$(kubectl version --short)" >>  report.log
           kubectl get pods -n kube-system >> report.log
           echo "\n Time for start cluster: $(($(date '+%s')-${{ steps.start.outputs.start }})) seconds" >> ${{ env.report.log }}
-                           
+
+        # echo -e "kube version:\n$(kubectl version --short)\n" >>                   
 
       - name: upload report
         uses: actions/upload-artifact@v2
