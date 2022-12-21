@@ -31,7 +31,7 @@ jobs:
       
       - name: Testing kind-cluster and get info
         run: |
-          echo "kube version:\n$(kubectl version --short)\n" >> report.log
+          echo -e "kube version:\n$(kubectl version --short)\n" >> report.log
           kubectl get pods -n kube-system >> report.log
           echo "\n Time for start cluster: $(($(date '+%s')-${{ steps.start.outputs.start }})) seconds" >> ${{ env.report.log }}
                            
