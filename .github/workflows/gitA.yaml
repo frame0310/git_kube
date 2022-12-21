@@ -31,7 +31,7 @@ jobs:
         run: |
           echo -e "kube version:\n$(kubectl version --short)" >>  ${{ env.report }}
           kubectl get nodes >> ${{ env.report }}
-          echo "\n Time for start cluster: $(($(date '+%s')-${{ steps.start.outputs.start }})) seconds" >> ${{ env.report }}
+        #echo "\n Time for start cluster: $(($(date '+%s')-${{ steps.start.outputs.start }})) seconds" >> ${{ env.report }}
 
         # echo -e "kube version:\n$(kubectl version --short)\n" >>                   
 
