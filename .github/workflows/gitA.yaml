@@ -29,15 +29,13 @@ jobs:
           echo "amount nodes: $(kubectl get nodes | grep -c 'Ready') \n" >> ${{ env.report }}
           echo "time for start cluster: $(($(date '+%s')-${{ steps.start1.outputs.start1 }})) seconds" >> ${{ env.report }}
      
-     
-     
-        #echo $($(date '+%s')-${{ steps.start.outputs.start }}) >> ${{ env.start_kind }}
-        # echo -e "kube version:\n$(kubectl version --short)\n" >>                   
+      - name: upload report
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ env.report }}
 
-      #- name: upload report
-      #  uses: actions/upload-artifact@v2
-      #  with:
-      #    path: ${{ env.report }}
+
+
   minikube:
     needs: kind
     runs-on: ubuntu-latest
