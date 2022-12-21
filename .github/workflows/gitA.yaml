@@ -16,7 +16,7 @@ jobs:
            
     steps:
       - name: job's start time
-        id: start
+        id: start1
         run: echo "start1=$(date '+%s')" >> $GITHUB_OUTPUT
 
       - uses: engineerd/setup-kind@v0.5.0
